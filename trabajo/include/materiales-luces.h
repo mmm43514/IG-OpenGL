@@ -58,7 +58,7 @@ class Textura
 
    // carga una imagen de textura en la memoria de vídeo, e
    // inicializa los atributos de la textura a valores por defecto.
-   Textura( const std::string & nombreArchivoJPG ) ;
+   Textura( const std::string & nombreArchivoJPG, ModoGenCT modo_gen_coord_text ) ;
 
    // libera la memoria dinámica usada por la textura, si hay alguna
    ~Textura() ;

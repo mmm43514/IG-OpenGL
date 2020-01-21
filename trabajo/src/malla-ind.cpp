@@ -11,6 +11,9 @@
 #include "malla-ind.h"   // declaración de 'ContextoVis'
 #include "lector-ply.h"
 
+//necesito para pr5
+#include "seleccion.h"
+
 
 // *****************************************************************************
 // funciones auxiliares
@@ -87,7 +90,6 @@ void MallaInd::calcularNormales()
 		if (nor_ver[i].lengthSq() > 0)
 			nor_ver[i] = nor_ver[i].normalized();
 }
-
 
 //----------------------------------------------------------------------------
 // comprueba que los valores de 'tipo' y 'tabla' son valores legales.
@@ -338,6 +340,14 @@ void MallaInd::visualizarGL( ContextoVis & cv )
    // guardar el color previamente fijado
    const Tupla4f color_previo = leerFijarColVertsCauce( cv );
 
+	// PR5:
+	if ( cv.modo_seleccion ){
+      if ( leerIdentificador()!= -1 ){
+         FijarColVertsIdent( *cv.cauce_act, leerIdentificador() );
+         cv.cauce_act->fijarEvalMIL( false );
+         cv.cauce_act->fijarEvalText( false );
+      }
+   }
    // -COMPLETAR: práctica 1: visualizar según el modo (en 'cv.modo_envio')
    //   ** inmediato begin/end                   : usar 'visualizarGL_MI_BE'
    //   ** inmediato con un VAO (glDrawElements) : usar 'visualizarGL_MI_VAO'
@@ -370,7 +380,7 @@ void MallaInd::visualizarNormales()
    std::vector<Tupla3f> segmentos ;
    for( unsigned i = 0 ; i < vertices.size() ; i++ )
    {  segmentos.push_back( vertices[i] );
-      segmentos.push_back( vertices[i]+ 0.35f*(nor_ver[i]) );
+      segmentos.push_back( vertices[i] + 0.35f*nor_ver[i] );
    }
    CError();
    glVertexPointer( 3, GL_FLOAT, 0, segmentos.data() );

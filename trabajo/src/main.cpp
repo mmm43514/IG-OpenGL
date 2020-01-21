@@ -66,14 +66,14 @@ void InicializaOpenGLCuadro()
    glClearColor( 0.2, 0.25, 0.3, 1.0 );
 
    // dibujar en modo 'suave' (antialiasing de lineas y puntos)
-   glEnable( GL_POINT_SMOOTH );
-   glEnable( GL_LINE_SMOOTH );
-   glEnable( GL_POLYGON_SMOOTH );
+   //glEnable( GL_POINT_SMOOTH );
+   //glEnable( GL_LINE_SMOOTH );
+   //glEnable( GL_POLYGON_SMOOTH );
 
    // habilitar 'blending' (tiene en cuenta transparencia, componente alpha del color)
-   glEnable( GL_BLEND );
-   glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
-   CError();
+   //glEnable( GL_BLEND );
+   //glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+   //CError();
 
    // para dibujar los polígonos rellenos más atrás que las aristas
    glEnable( GL_POLYGON_OFFSET_FILL );
@@ -446,6 +446,8 @@ void Inicializar( int argc, char *argv[] )
    escenas.push_back( new Escena3() );
 
 	escenas.push_back( new Escena4() );
+	
+	escenas.push_back( new Escena5() );
 	
    // COMPLETAR: Prácticas 2,3,4 y 5
    // hacer 'push_back' en el vector de escenas de instancias de 'Escena2',

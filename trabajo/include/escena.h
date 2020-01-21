@@ -102,6 +102,16 @@ class Escena4 : public Escena
 } ;
 
 // -------------------------------------------------------------------------
+// clase derivada de 'Escena', define un constructor que permite añadir
+// al array de objetos de la escena los objetos que se indican en la práctica 5
+
+class Escena5 : public Escena
+{
+   public:
+     Escena5();
+} ;
+
+// -------------------------------------------------------------------------
 // COMPLETAR: Práctica 2, 3, 4 y 5.
 // Añadir la declaración de las clases Escena2, Escena3, etc ..... para definir
 // los objetos que se indican en los guiones de las prácticas 2,3,4 y 5.

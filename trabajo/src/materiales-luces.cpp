@@ -29,13 +29,14 @@ const bool trazam = false ;
 
 //**********************************************************************
 
-Textura::Textura( const std::string & nombreArchivoJPG )
+Textura::Textura( const std::string & nombreArchivoJPG, ModoGenCT modo_gen_coord_text)
 {
    // -COMPLETAR: práctica 4: cargar imagen de textura
    // (las variables de instancia están inicializadas en la decl. de la clase)
    // ..... 
    imagen = LeerArchivoJPEG( nombreArchivoJPG.c_str(), ancho, alto );
-
+	
+	modo_gen_ct = modo_gen_coord_text;
 }
 
 // ---------------------------------------------------------------------
@@ -222,7 +223,7 @@ void FuenteLuz::actualizarLongi( const float incre )
 {
    longi = longi + incre ;
    using namespace std ;
-   cout << "incrementada longitud de una fuente de luz, nueva == " << longi << endl ;
+   //cout << "incrementada longitud de una fuente de luz, nueva == " << longi << endl ;
 }
 //----------------------------------------------------------------------
 // para fuentes diraccionales, incrementar o decrementar la longitud
@@ -249,7 +250,7 @@ void ColFuentesLuz::insertar( FuenteLuz * pf )  // inserta una nueva
 }
 //----------------------------------------------------------------------
 // activa una colección de fuentes de luz
-
+// longi y lati en GRADOS
 void ColFuentesLuz::activar( Cauce & cauce )
 {
    // COMPLETAR: práctica 4: activar una colección de fuentes de luz
@@ -258,12 +259,21 @@ void ColFuentesLuz::activar( Cauce & cauce )
    // .....
    vector<Tupla3f> colores;
    vector<Tupla4f> pos_dir_wc;
-   
+   /*
    for (int i = 0; i < vpf.size(); i++){
 	   colores.push_back(vpf[i]->color);
 	   pos_dir_wc.push_back( Tupla4f((180.0/M_PI) * cos(vpf[i]->longi) * cos(vpf[i]->lati),\
 	   (180.0/M_PI) * sin(vpf[i]->lati), (180.0/M_PI) * sin(vpf[i]->longi) * cos(vpf[i]->lati), 0.0) ); // direccional
+   }*/
+   float longitud, latitud;
+   for (int i = 0; i < vpf.size(); i++){
+		longitud = vpf[i]->longi * (M_PI/180.0);
+		latitud = vpf[i]->lati * (M_PI/180.0);
+	   colores.push_back(vpf[i]->color);
+	   pos_dir_wc.push_back( Tupla4f( cos(longitud) * cos(latitud),\
+	   sin(latitud), sin(longitud) * cos(latitud), 0.0) ); // direccional
    }
+   
 	cauce.fijarFuentesLuz(colores, pos_dir_wc);
 }
 

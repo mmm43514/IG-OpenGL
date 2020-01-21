@@ -23,6 +23,9 @@
 #include "grafo-escena.h"
 #include "malla-ind.h"
 
+//necesito para pr5
+#include "seleccion.h"
+
 using namespace std ;
 
 // *********************************************************************
@@ -89,25 +92,21 @@ void NodoGrafoEscena::visualizarGL( ContextoVis & cv )
 		
    // guarda el modelview actual
    cv.cauce_act->pushMM();
+   
+   // guardar el color previamente fijado
+   const Tupla4f color_previo = leerFijarColVertsCauce( cv );
 
    // recorrer todas las entradas del array que hay en el nodo:
    for ( unsigned i = 0; i < entradas.size(); i++ ){
       switch ( entradas[i].tipo ){
-      case TipoEntNGE::objeto :  // entrada objeto
-         if ( entradas[i].objeto->tieneColor() ){
-	         Tupla4f t = cv.cauce_act->leerColorActual(); // leemos color cauce
-	         glColor3fv( entradas[i].objeto->leerColor() );
-	         entradas[i].objeto->visualizarGL( cv );  // visualizar objeto
-	         glColor4fv( t ); // restauramos color
-         }
-         else		 
+      case TipoEntNGE::objeto :  // entrada objeto	 
 	         entradas[i].objeto->visualizarGL( cv );  // visualizar objeto
          break;
       case TipoEntNGE::transformacion :  // entrada transformacion
          cv.cauce_act->compMM( *(entradas[i].matriz) ); // componer matriz
          break;
       case TipoEntNGE::material : // entrada material
-			if(cv.iluminacion){
+			if (cv.iluminacion){
 				entradas[i].material->activar(*cv.cauce_act); // activamos material
 				cv.material_act = entradas[i].material; // actualizamos material
 			}
@@ -117,11 +116,16 @@ void NodoGrafoEscena::visualizarGL( ContextoVis & cv )
 	//restauramos material activo al inicial si ha cambiado
 	if (cv.iluminacion){
 		cv.material_act = mat_backup;
-		//cv.material_act->
+		cv.material_act->activar(*cv.cauce_act);
 	}
-		
+	
+	// restaurar el color previamente fijado
+   glColor4fv( color_previo );
+   
 	// restaura modelview guardada
    cv.cauce_act->popMM();
+   
+
 }
 
 // *****************************************************************************
@@ -200,7 +204,35 @@ void NodoGrafoEscena::calcularCentroOC()
    //    en coordenadas de objeto (hay que hacerlo recursivamente)
    //   (si el centro ya ha sido calculado, no volver a hacerlo)
    // ........
+  if (centro_calculado)
+    return;
 
+  std::vector<Tupla3f> centros_entradas;
+
+  Matriz4f matriz_modelado = MAT_Ident();
+
+  for (int i = 0; i < entradas.size(); i++){
+    switch (entradas[i].tipo){
+    case TipoEntNGE::objeto:
+      entradas[i].objeto->calcularCentroOC();
+      centros_entradas.push_back(matriz_modelado * entradas[i].objeto->leerCentroOC());     
+      break;
+    case TipoEntNGE::transformacion:
+      matriz_modelado = matriz_modelado * (*entradas[i].matriz);
+      break;
+    }
+ }
+
+  Tupla3f centro(0.0, 0.0, 0.0);
+
+  for (int i = 0; i < centros_entradas.size(); i++)
+    centro = centro + centros_entradas[i];
+
+  centro = centro / (float) centros_entradas.size();
+  
+  ponerCentroOC(centro);
+
+  centro_calculado = true;
 }
 // -----------------------------------------------------------------------------
 // método para buscar un objeto con un identificador y devolver un puntero al mismo
@@ -220,25 +252,43 @@ bool NodoGrafoEscena::buscarObjeto
 
    // 1. calcula el centro del objeto, (solo la primera vez)
    // ........
-
+	calcularCentroOC();
 
    // 2. si el identificador del nodo es el que se busca, ya está (terminar)
    // ........
+   if ( ident_busc == leerIdentificador() ){
+		*objeto = this;
+		centro_wc = leerCentroOC();
+		return true;
+	}
 
 
    // 3. El nodo no es el buscado: buscar recursivamente en los hijos
    //    (si alguna llamada para un sub-árbol lo encuentra, terminar y devolver 'true')
    // ........
+  bool encontrado = false;
+   
+  Matriz4f matriz_modelado = mmodelado;
+   
+  for (int i = 0; i < entradas.size() && !encontrado; i++)
+    switch (entradas[i].tipo){
+    case TipoEntNGE::objeto:
+      if (entradas[i].objeto->buscarObjeto(ident_busc, matriz_modelado, objeto, centro_wc))
+			encontrado = true; 
+      break;
+    case TipoEntNGE::transformacion:
+      matriz_modelado = matriz_modelado * (*entradas[i].matriz);
+      break;
+    }
 
-
-   // ni este nodo ni ningún hijo es el buscado: terminar
-   return false ;
+  return encontrado;
 }
 
 NodoCubo24::NodoCubo24(){
+	ponerNombre("Cubo de la UGR");
 	Cubo24 * c24 = new Cubo24();
 	
-	Textura * escudo = new Textura("../recursos/imgs/window-icon.jpg");
+	Textura * escudo = new Textura("../recursos/imgs/window-icon.jpg", mgct_desactivada);
 	Material * mat_escudo = new Material(escudo, 0.5, 1, 0, 0);
 	
 	agregar(mat_escudo);

@@ -10,10 +10,32 @@ class Lata : public NodoGrafoEscena{
 	Lata();
 	
 };
+
+class LataPepsi : public NodoGrafoEscena{
+	public:
+	
+	LataPepsi();
+	
+};
+
+class LataUGR : public NodoGrafoEscena{
+	public:
+	
+	LataUGR();
+	
+};
+
 class LataPeones : public NodoGrafoEscena{
    public:
 
    LataPeones();
+
+};
+
+class VariasLatasPeones : public NodoGrafoEscena{
+   public:
+
+   VariasLatasPeones();
 
 };
 

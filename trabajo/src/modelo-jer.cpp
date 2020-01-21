@@ -4,7 +4,8 @@
   Material* mate = new Material(0.5, 1, 0, 0);
   
 C::C(const float ang_rot_inicial_cil1, const float ang_rot_inicial_cil2, const float tras_sup_inicial, const float tras_hor_inicial, const float rot_arco_inicial){
-  ponerNombre("C");
+  ponerNombre("Arco en C - equipo rayos X");
+  ponerIdentificador(-1); // por defecto ya -1
   // Comprobaciones de parámetros iniciales
   assert(-30<=ang_rot_inicial_cil1 && ang_rot_inicial_cil1<=30);
   assert(-90<=ang_rot_inicial_cil2 && ang_rot_inicial_cil2<=90);
@@ -23,7 +24,9 @@ C::C(const float ang_rot_inicial_cil1, const float ang_rot_inicial_cil2, const f
 
   // Creamos base cubica
   BaseArcoC * baseC = new BaseArcoC();
-   agregar(mate); //Material
+  baseC->ponerNombre("Base del Arco en C");
+  baseC->ponerIdentificador(11);
+  agregar(mate); // Material
   agregar( baseC );
   Tupla3f blanco (0.973, 0.957, 0.867);
   baseC->ponerColor(blanco);
@@ -135,53 +138,73 @@ void C::actualizarEstadoParametro( const unsigned iParam, const float t_sec ){
 }
 
 
-CilindroV::CilindroV(){
+CilindroV::CilindroV(){  
   agregar( MAT_Escalado(0.1, 1, 0.1) );
   Cilindro * cilindro = new Cilindro(12, 24, false);
-  
+ 
   agregar(meta); //Material
+  
+  cilindro->ponerNombre("Cilindro Vertical");
+  cilindro->ponerIdentificador(18);
+  
   agregar(cilindro);
   Tupla3f gris (0.639,0.639,0.639);
   this->ponerColor(gris);
 }
 
-CilindroH::CilindroH(){
+CilindroH::CilindroH(){  
   agregar( MAT_Rotacion(90, 0, 0, 1) );
   agregar( MAT_Escalado(0.1, 1, 0.1) );
 
-  	agregar(meta); //Material
+  agregar(meta); //Material
   Cilindro * cilind = new Cilindro(12, 24, false);
+  
+  cilind->ponerNombre("Cilindro Horizontal");
+  cilind->ponerIdentificador(20);
+  
   agregar(cilind);
   Tupla3f gris (0.639,0.639,0.639);
   this->ponerColor(gris);
 }
 
-SoporteSuperior::SoporteSuperior(){
+SoporteSuperior::SoporteSuperior(){  
   agregar( MAT_Escalado(0.65, 0.25, 0.25) );
-    agregar(mate); //Material
+  agregar(mate); //Material
   Cubo24 * cubo = new Cubo24();
+  
+  cubo->ponerNombre("Soporte Superior");
+  cubo->ponerIdentificador(19);
+  
   agregar( cubo );
   Tupla3f blanco (0.973, 0.957, 0.867);
   this->ponerColor(blanco);
 }
 
-EngArco::EngArco(){
+EngArco::EngArco(){  
   agregar( MAT_Traslacion(0, -0.1, 0) );
   agregar( MAT_Rotacion(180, 0, 1, 0) );
   agregar( MAT_Rotacion(90, 1, 0, 0) );
   agregar( MAT_Traslacion(-1.85-0.24, 0, 0) );
   agregar(mate); //Material
   EngancheArco * eng = new EngancheArco();
+  
+  eng->ponerNombre("Enganche del Arco en C");
+  eng->ponerIdentificador(21);
+  
   agregar(eng);
   Tupla3f blanco (0.973, 0.957, 0.867);
   this->ponerColor(blanco);   
 }
 
-TamborArco::TamborArco(){
+TamborArco::TamborArco(){  
   agregar( MAT_Traslacion(-0.2+1.85,-0.34,0) );
   agregar( MAT_Rotacion(-90,0,0,1) );
   agregar(mate); //Material
   MallaRevolPLY * tamb_arco = new MallaRevolPLY("./plys/TamborArco.ply", 24);
+  
+  tamb_arco->ponerNombre("Tambor del Arco en C");
+  tamb_arco->ponerIdentificador(23);
+  
   agregar(tamb_arco);
   Tupla3f blanco (0.973, 0.957, 0.867);
   this->ponerColor(blanco);
@@ -190,8 +213,12 @@ TamborArco::TamborArco(){
 FrenteTambor::FrenteTambor(){
   agregar( MAT_Traslacion(-1.85,-0.44,0) );
   agregar( MAT_Escalado(0.46,0.44,0.35) );
-    agregar(mate); //Material
+  agregar(mate); //Material
   Cubo24 * cu_frente_tambor = new Cubo24();
+  
+  cu_frente_tambor->ponerNombre("Frente del Arco en C");
+  cu_frente_tambor->ponerIdentificador(24);
+  
   agregar(cu_frente_tambor);
   Tupla3f blanco (0.973, 0.957, 0.867);
   this->ponerColor(blanco);
@@ -203,24 +230,36 @@ ArcoR::ArcoR(){
   Tupla3f gris2(0.867, 0.863, 0.855);
   agregar(meta); //Material
   arcorect->ponerColor(gris2);
+  
+  arcorect->ponerNombre("ArcoR");
+  arcorect->ponerIdentificador(22);
+  
   agregar(arcorect);
 }
 
-BaseBajaArcoC::BaseBajaArcoC(){
+BaseBajaArcoC::BaseBajaArcoC(){  
   Cubo24 * cubo = new Cubo24();
   agregar(MAT_Traslacion(0,-1.1,0));
   agregar(MAT_Escalado(1,0.1,1));
   agregar(mate); //Material
+  
+  cubo->ponerNombre("Base inferior, cuadrada");
+  cubo->ponerIdentificador(12);
+  
   agregar(cubo);
   
   Tupla3f gris_oscuro (0.41, 0.40, 0.40);
   ponerColor(gris_oscuro);
 }
 
-BaseBajaDchaArcoC::BaseBajaDchaArcoC(){
+BaseBajaDchaArcoC::BaseBajaDchaArcoC(){  
   BaseInferiorTriangArcoC * base_inf_tri = new BaseInferiorTriangArcoC();
   agregar(MAT_Traslacion(1,-1,0));
   agregar(mate); //Material
+  
+  base_inf_tri->ponerNombre("Base inferior, triangular");
+  base_inf_tri->ponerIdentificador(13);
+  
   agregar(base_inf_tri);
   
   Tupla3f gris_oscuro (0.41, 0.40, 0.40);
@@ -242,12 +281,20 @@ TotalRuedas::TotalRuedas(){
   agregar(MAT_Traslacion(1,-1,0));
   agregar(mate); //Material
   Rueda * ru1 = new Rueda(1.75,-0.325,0.3625);
+  ru1->ponerNombre("Rueda 1");
+  ru1->ponerIdentificador(14);
   agregar(ru1);
   Rueda * ru2 = new Rueda(1.75,-0.325,-0.3625);
+  ru2->ponerNombre("Rueda 2");
+  ru2->ponerIdentificador(15);
   agregar(ru2);
   
   Rueda * ru3 = new Rueda(0.0,-0.325,1.0625);
+  ru3->ponerNombre("Rueda 3");
+  ru3->ponerIdentificador(16);
   agregar(ru3);
   Rueda * ru4 = new Rueda(0.0,-0.325,-1.0625);
+  ru4->ponerNombre("Rueda 4");
+  ru4->ponerIdentificador(17);
   agregar(ru4);
 }

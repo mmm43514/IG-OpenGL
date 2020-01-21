@@ -28,6 +28,13 @@ Escena::Escena()
 
    // COMPLETAR: Práctica 5: hacer 'push_back' de varias camaras perspectiva u ortogonales,
    // (sustituir la cámara orbital simple ('CamaraOrbitalSimple') por varias cámaras de 3 modos ('Camara3Modos')
+   camaras.push_back( new Camara3Modos(true, {0.0,0.0,8.0}, 0.67, {0.0,0.0,0.0}) );
+   camaras.push_back( new Camara3Modos(false, {0.0,0.0,-8.0}, 0.67, {0.0,0.0,0.0}) );
+   camaras.push_back( new Camara3Modos(true, {-8.0,0.0,0.0}, 0.67, {0.0,0.0,0.0}) );
+   camaras.push_back( new Camara3Modos(false, {8.0,0.0,0.0}, 0.67, {0.0,0.0,0.0}) );
+   camaras.push_back( new Camara3Modos(true, {6.0,0.0,6.0}, 0.67, {2.0,0.0,0.0}) );
+   camaras.push_back( new Camara3Modos(false, {6.0,0.0,6.0}, 0.67, {2.0,0.0,0.0}) );
+
    camaras.push_back( new CamaraOrbitalSimple() );
 
 }
@@ -71,7 +78,7 @@ void Escena::visualizarGL( ContextoVis & cv )
 
    if ( cv.iluminacion )
    {
-      // COMPLETAR: Práctica 4: activar evaluación del MIL (y desactivar texturas)
+      // -COMPLETAR: Práctica 4: activar evaluación del MIL (y desactivar texturas)
       // * comprobar que existe la coleccion de fuentes (col_fuentes)
       // * comprobar que existe el material inicial (material_ini)
       // * activar la colección de fuentes y el material inicial
@@ -273,5 +280,15 @@ Escena4::Escena4()
 // los objetos que se indican en los guiones de las práctica 5
 // .......
 
+Escena5::Escena5()
+{
+	using namespace std;
+	cout << "Creando objetos de escena 5 ... " << flush;
+	
+	//objetos.push_back( new NodoCubo24() );
+	objetos.push_back( new VariasLatasPeones() );
+	
+	cout << "hecho." << endl << flush ; 
+}
 
 
