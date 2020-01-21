@@ -1,3 +1,0 @@
-/home/mx3/Cuarto/IG/Pr/trabajo/cmake-unix/build/CMakeFiles/rebuild_cache.dir
-/home/mx3/Cuarto/IG/Pr/trabajo/cmake-unix/build/CMakeFiles/pracs_ig_exe.dir
-/home/mx3/Cuarto/IG/Pr/trabajo/cmake-unix/build/CMakeFiles/edit_cache.dir
